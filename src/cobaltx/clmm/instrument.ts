@@ -1651,6 +1651,15 @@ export class ClmmInstrument {
       bool("isBaseInput"),
     ]);
 
+    const cpiEventAccounts = [
+      {
+        pubkey: PublicKey.findProgramAddressSync([Buffer.from("__event_authority")], programId)[0],
+        isSigner: false,
+        isWritable: false,
+      },
+      { pubkey: programId, isSigner: false, isWritable: false },
+    ];
+
     const remainingAccounts = [
       ...(exTickArrayBitmap ? [{ pubkey: exTickArrayBitmap, isSigner: false, isWritable: true }] : []),
       ...tickArray.map((i) => ({ pubkey: i, isSigner: false, isWritable: true })),
@@ -1675,6 +1684,7 @@ export class ClmmInstrument {
       { pubkey: inputMint, isSigner: false, isWritable: false },
       { pubkey: outputMint, isSigner: false, isWritable: false },
 
+      ...cpiEventAccounts,
       ...remainingAccounts,
     ];
 
